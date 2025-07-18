@@ -1,0 +1,42 @@
+package pews:dom@0.0.1;
+
+interface domparser {
+    use document.{document};
+
+    resource domparser {
+        parse-from-string: func(input-string: string, mime-type: string) -> document;
+        constructor();
+    }
+}
+
+interface node {
+    enum node-type {
+        document-node,
+        element-node,
+        text-node
+    }
+
+    resource node {
+        constructor();
+        node-name: func() -> string;
+        node-type: func() -> node-type;
+        parent-node: func() -> node;
+        child-nodes: func() -> list<node>;
+    }
+}
+
+interface document {
+    use node.{node};
+    resource document {
+        constructor();
+        body: func() -> node;
+        document-element: func() -> node;
+    }
+}
+
+world world-domparser {
+    include wasi:cli/imports@0.2.0;
+    export domparser;
+    export document;
+    export node;
+}
